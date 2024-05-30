@@ -16,6 +16,7 @@ return {
       },
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'
+        local wk = require 'which-key'
 
         local function map(mode, l, r, opts)
           opts = opts or {}
@@ -30,7 +31,7 @@ return {
           else
             gitsigns.nav_hunk 'next'
           end
-        end, { desc = 'Jump to next git [c]hange' })
+        end, { desc = 'Jump to next git change' })
 
         map('n', '[c', function()
           if vim.wo.diff then
@@ -38,31 +39,47 @@ return {
           else
             gitsigns.nav_hunk 'prev'
           end
-        end, { desc = 'Jump to previous git [c]hange' })
+        end, { desc = 'Jump to previous git change' })
 
         -- Actions
         -- visual mode
-        map('v', '<leader>hs', function()
+        map('v', '<leader>Gs', function()
           gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
         end, { desc = 'stage git hunk' })
-        map('v', '<leader>hr', function()
+        map('v', '<leader>Gr', function()
           gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
         end, { desc = 'reset git hunk' })
-        -- normal mode
-        map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
-        map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
-        map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
-        map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = 'git [u]ndo stage hunk' })
-        map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
-        map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
-        map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
-        map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
-        map('n', '<leader>hD', function()
-          gitsigns.diffthis '@'
-        end, { desc = 'git [D]iff against last commit' })
+
+        wk.register({
+          ['g'] = {
+            name = 'Git',
+            -- g = { "<cmd>lua require 'terminal'.lazygit_toggle()<cr>", 'Lazygit' },
+            l = { gitsigns.blame_line, 'Blame' },
+            L = { gitsigns.blame_line { full = true }, 'Blame Line (full)' },
+            p = { gitsigns.preview_hunk, 'Preview Hunk' },
+            r = { gitsigns.reset_hunk, 'Reset Hunk' },
+            R = { gitsigns.reset_buffer, 'Reset Buffer' },
+            s = { gitsigns.stage_hunk, 'Stage Hunk' },
+            S = { gitsigns.stage_buffer, 'Stage Buffer' },
+            u = { gitsigns.undo_stage_hunk, 'Undo Stage Hunk' },
+            o = { '<cmd>Telescope git_status<cr>', 'Git status' },
+            b = { '<cmd>Telescope git_branches<cr>', 'Checkout branch' },
+            c = { '<cmd>Telescope git_commits<cr>', 'Checkout commit' },
+            C = {
+              '<cmd>Telescope git_bcommits<cr>',
+              'Checkout commit(for current file)',
+            },
+            d = {
+              '<cmd>Gitsigns diffthis HEAD<cr>',
+              'Git Diff ~HEAD',
+            },
+            D = { '<cmd>Gitsigns diffthis @<cr>', 'Diff against last commit' },
+          },
+        }, { prefix = '<leader>' })
+
         -- Toggles
-        map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
-        map('n', '<leader>tD', gitsigns.toggle_deleted, { desc = '[T]oggle git show [D]eleted' })
+        map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = 'Toggle git show blame line' })
+        map('n', '<leader>tD', gitsigns.toggle_deleted, { desc = 'Toggle git show Deleted' })
       end,
     },
   },
