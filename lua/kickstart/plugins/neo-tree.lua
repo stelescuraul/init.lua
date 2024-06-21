@@ -13,6 +13,7 @@ return {
   cmd = 'Neotree',
   keys = {
     { '<leader>e', ':Neotree reveal<CR>', { desc = 'NeoTree reveal' } },
+    { '<leader>ba', ':Neotree document_symbols<cr>', { desc = 'Document symbols' } },
   },
   opts = {
     filesystem = {
@@ -25,5 +26,17 @@ return {
         },
       },
     },
+    document_symbols = {
+      window = {
+        mappings = {
+          ['<leader>e'] = 'close_window',
+          ['w'] = {},
+          ['l'] = 'open',
+          ['h'] = 'close_node',
+        },
+        position = 'right'
+      },
+    },
+    sources = { 'filesystem', 'document_symbols' },
   },
 }
