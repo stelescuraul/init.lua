@@ -3,9 +3,16 @@ local utils = require 'kickstart.utils'
 return {
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    cond = function()
+      return not vim.g.vscode
+    end,
     dependencies = {
       { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
+      { 'williamboman/mason-lspconfig.nvim', opts = {
+        ensure_installed = {
+          'eslint@4.8.0',
+        },
+      } },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -15,8 +22,11 @@ return {
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
       { 'folke/neodev.nvim', opts = {} },
+      { 'yioneko/nvim-vtsls', event = 'VeryLazy' },
     },
     config = function()
+      -- require('lspconfig.configs').vtsls = require('vtsls').lspconfig -- set default server config, optional but recommended
+
       --  This function gets run when an LSP attaches to a particular buffer.
       --    That is to say, every time a new file is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
@@ -55,7 +65,6 @@ return {
               d = { '<cmd>Telescope diagnostics bufnr=0<cr>', 'Buffer Diagnostics' },
               D = { builtin.diagnostics, 'Workspace Diagnostics' },
               i = { '<cmd>LspInfo<cr>', 'Lsp Info' },
-              I = { '<cmd>Mason<cr>', 'Mason Info' },
               n = { '<cmd>lua vim.diagnostic.goto_next()<cr>', 'Next Diagnostic' },
               p = { '<cmd>lua vim.diagnostic.goto_prev()<cr>', 'Prev Diagnostic' },
               o = { '<cmd>LspOrganize<cr>', 'Organize Imports' },
@@ -141,11 +150,12 @@ return {
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = {
-          filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
-        },
+        -- tsserver = {
+        --   filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
+        -- },
+        -- eslint = {},
         -- eslint_d = {},
-        ['eslint-lsp'] = {},
+        -- ['eslint-lsp'] = {},
         prettierd = {},
         --
 
@@ -163,6 +173,77 @@ return {
             },
           },
         },
+        vtsls = {
+          settings = {
+            vtsls = {
+              enableMoveToFileCodeAction = true,
+              autoUseWorkspaceTsdk = true,
+              experimental = {
+                completion = {
+                  enableServerSideFuzzyMatch = true,
+                },
+              },
+            },
+
+            javascript = {
+              format = {
+                enable = false,
+                insertSpaceAfterOpeningAndBeforeClosingEmptyBraces = false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
+              },
+              updateImportsOnFileMove = { enabled = 'always' },
+              suggest = { completeFunctionCalls = true },
+              inlayHints = {
+                enumMemberValues = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                parameterNames = { enabled = 'literals' },
+                parameterTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                variableTypes = { enabled = false },
+              },
+            },
+            typescript = {
+              format = {
+                enable = false,
+                insertSpaceAfterOpeningAndBeforeClosingEmptyBraces = false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
+              },
+              updateImportsOnFileMove = { enabled = 'always' },
+              suggest = { completeFunctionCalls = true },
+              inlayHints = {
+                enumMemberValues = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                parameterNames = { enabled = 'literals' },
+                parameterTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                variableTypes = { enabled = false },
+              },
+            },
+          },
+          handlers = {
+            ['textDocument/publishDiagnostics'] = function(_, result, ctx, config)
+              if result.diagnostics == nil then
+                return
+              end
+
+              -- ignore some tsserver diagnostics
+              local idx = 1
+              while idx <= #result.diagnostics do
+                local entry = result.diagnostics[idx]
+
+                -- codes: https://github.com/microsoft/TypeScript/blob/main/src/compiler/diagnosticMessages.json
+                if entry.code == 80001 then
+                  -- { message = "File is a CommonJS module; it may be converted to an ES module.", }
+                  table.remove(result.diagnostics, idx)
+                else
+                  idx = idx + 1
+                end
+              end
+
+              vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
+            end,
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -178,7 +259,7 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'markdownlint'
+        'markdownlint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -186,6 +267,10 @@ return {
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
+            -- if server == 'tsserver' then
+            --   return
+            -- end
+
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)

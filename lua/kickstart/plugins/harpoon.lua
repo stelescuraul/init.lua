@@ -4,11 +4,19 @@ return {
   {
     'theprimeagen/harpoon',
     branch = 'harpoon2',
+    cond = function()
+      return not vim.g.vscode
+    end,
     config = function()
       local harpoon = require 'harpoon'
       local wk = require 'which-key'
 
-      harpoon:setup()
+      harpoon:setup {
+        settings = {
+          save_on_toggle = true,
+          sync_on_ui_close = true,
+        },
+      }
 
       wk.register({
         ['a'] = {

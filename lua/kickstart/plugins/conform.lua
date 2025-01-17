@@ -10,6 +10,11 @@ return {
         end,
         desc = 'Format buffer',
       },
+      {
+        '<leader>lF',
+        '<cmd>EslintFixAll<cr>',
+        desc = 'Format buffer with eslint',
+      },
     },
     opts = {
       notify_on_error = false,

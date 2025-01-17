@@ -24,7 +24,8 @@ require('lazy').setup({
 
   require 'kickstart/plugins/cmp',
 
-  require 'kickstart/plugins/tokyonight',
+  -- require 'kickstart/plugins/tokyonight',
+  require 'kickstart/plugins/rose-pine',
 
   require 'kickstart/plugins/todo-comments',
 
@@ -36,7 +37,7 @@ require('lazy').setup({
 
   require 'kickstart/plugins/harpoon',
 
-  -- require 'kickstart/plugins/copilot',
+  require 'kickstart/plugins/copilot',
 
   -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.lint',
@@ -85,6 +86,7 @@ wk.register({
     p = { '<cmd>Lazy profile<cr>', 'Profile' },
     l = { '<cmd>Lazy log<cr>', 'Log' },
     d = { '<cmd>Lazy debug<cr>', 'Debug' },
+    m = { '<cmd>Mason<cr>', 'Mason Info' },
   },
 }, {
   prefix = '<leader>',

@@ -4,6 +4,9 @@
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
+  cond = function()
+    return not vim.g.vscode
+  end,
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
@@ -34,7 +37,7 @@ return {
           ['l'] = 'open',
           ['h'] = 'close_node',
         },
-        position = 'right'
+        position = 'right',
       },
     },
     sources = { 'filesystem', 'document_symbols' },

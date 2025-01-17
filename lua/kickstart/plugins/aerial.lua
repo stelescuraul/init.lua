@@ -6,6 +6,9 @@ return {
       'nvim-treesitter/nvim-treesitter',
       'nvim-tree/nvim-web-devicons',
     },
+    cond = function()
+      return not vim.g.vscode
+    end,
     config = function()
       local aerial = require 'aerial'
       local wk = require 'which-key'

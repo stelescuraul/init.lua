@@ -1,0 +1,7 @@
+{
+  "languageserver": {
+  },
+  "tsserver.implicitProjectConfig.checkJs": true,
+  "typescript.autoClosingTags": true,
+  "tsserver.experimental.enableProjectDiagnostics": true
+ }

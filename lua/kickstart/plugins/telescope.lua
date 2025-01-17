@@ -10,6 +10,9 @@ return {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
     branch = '0.1.x',
+    cond = function()
+      return not vim.g.vscode
+    end,
     dependencies = {
       'nvim-lua/plenary.nvim',
       {
