@@ -18,6 +18,8 @@ require('lazy').setup({
 
   require 'kickstart/plugins/telescope',
 
+  -- require 'kickstart/plugins/coc',
+
   require 'kickstart/plugins/lspconfig',
 
   require 'kickstart/plugins/conform',
@@ -39,12 +41,13 @@ require('lazy').setup({
 
   require 'kickstart/plugins/copilot',
 
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.aerial',
   require 'kickstart.plugins.markdown-preview',
+  -- require 'kickstart.plugins.typescript-tools',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.

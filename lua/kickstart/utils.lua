@@ -77,4 +77,15 @@ function M.buf_kill(kill_command, bufnr, force)
   end
 end
 
+function M.merge(...)
+  local result = {}
+  for i = 1, select("#", ...) do
+    local t = select(i, ...)
+    for k, v in pairs(t) do
+      result[k] = v
+    end
+    return result
+  end
+end
+
 return M

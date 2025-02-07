@@ -11,7 +11,30 @@ return {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
     'MunifTanjim/nui.nvim',
-    's1n7ax/nvim-window-picker',
+    {
+      's1n7ax/nvim-window-picker',
+      config = function()
+        require('window-picker').setup {
+          selection_chars = '123456789',
+          show_prompt = true,
+          highlights = {
+            enabled = false,
+            statusline = {
+              focused = {
+                fg = '#ededed',
+                bg = '#e35e4f',
+                bold = true,
+              },
+              unfocused = {
+                fg = '#ededed',
+                bg = '#f89595',
+                bold = true,
+              },
+            },
+          },
+        }
+      end,
+    },
   },
   cmd = 'Neotree',
   keys = {
@@ -24,8 +47,11 @@ return {
         mappings = {
           ['<leader>e'] = 'close_window',
           ['w'] = {},
-          ['l'] = 'open',
+          ['<cr>'] = 'open_with_window_picker',
+          ['l'] = 'open_with_window_picker',
           ['h'] = 'close_node',
+          ['S'] = 'split_with_window_picker',
+          ['s'] = 'vsplit_with_window_picker',
         },
       },
     },
@@ -38,6 +64,9 @@ return {
           ['h'] = 'close_node',
         },
         position = 'right',
+        window_picker = {
+          enable = true,
+        },
       },
     },
     sources = { 'filesystem', 'document_symbols' },

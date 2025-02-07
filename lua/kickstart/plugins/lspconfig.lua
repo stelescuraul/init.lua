@@ -210,6 +210,9 @@ return {
               },
               updateImportsOnFileMove = { enabled = 'always' },
               suggest = { completeFunctionCalls = true },
+              tsserver = {
+                maxTsServerMemory = 5120,
+              },
               inlayHints = {
                 enumMemberValues = { enabled = true },
                 functionLikeReturnTypes = { enabled = true },

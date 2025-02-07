@@ -55,6 +55,7 @@ return {
           s = { "<cmd>lua require'dap'.continue()<cr>", 'Start' },
           q = { "<cmd>lua require'dap'.close()<cr>", 'Quit' },
           U = { "<cmd>lua require'dapui'.toggle({reset = true})<cr>", 'Toggle UI' },
+          f = { "<cmd>lua require'dapui'.eval()<cr>", 'Toggle floating under cursor' },
         },
 
         ['b'] = {
@@ -64,7 +65,7 @@ return {
           b = { '<cmd>bprevious<cr>', 'Previous Buffer' },
         },
 
-        ['t'] = { name = 'Toggle', _ = 'which_key_ignore' },
+        ['T'] = { name = 'Toggle', _ = 'which_key_ignore' },
         ['e'] = { 'NeoTree reveal', _ = 'which_key_ignore' },
         ['w'] = { '<cmd>w!<CR>', 'Save' },
         ['c'] = { '<cmd>BufferKill<CR>', 'Close Buffer' },
