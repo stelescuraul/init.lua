@@ -38,41 +38,22 @@ return {
       }
 
       -- Document existing key chains
-      require('which-key').register({
-        ['d'] = {
-          name = 'Debug',
-          t = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", 'Toggle Breakpoint' },
-          b = { "<cmd>lua require'dap'.step_back()<cr>", 'Step Back' },
-          c = { "<cmd>lua require'dap'.continue()<cr>", 'Continue' },
-          C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", 'Run To Cursor' },
-          d = { "<cmd>lua require'dap'.disconnect()<cr>", 'Disconnect' },
-          g = { "<cmd>lua require'dap'.session()<cr>", 'Get Session' },
-          i = { "<cmd>lua require'dap'.step_into()<cr>", 'Step Into' },
-          o = { "<cmd>lua require'dap'.step_over()<cr>", 'Step Over' },
-          u = { "<cmd>lua require'dap'.step_out()<cr>", 'Step Out' },
-          p = { "<cmd>lua require'dap'.pause()<cr>", 'Pause' },
-          r = { "<cmd>lua require'dap'.repl.toggle()<cr>", 'Toggle Repl' },
-          s = { "<cmd>lua require'dap'.continue()<cr>", 'Start' },
-          q = { "<cmd>lua require'dap'.close()<cr>", 'Quit' },
-          U = { "<cmd>lua require'dapui'.toggle({reset = true})<cr>", 'Toggle UI' },
-          f = { "<cmd>lua require'dapui'.eval()<cr>", 'Toggle floating under cursor' },
-        },
+      require('which-key').add({
+        { '<leader>/', '<Plug>(comment_toggle_linewise_current)', desc = 'Comment toggle current line' },
 
-        ['b'] = {
-          name = 'Buffer',
-          N = { '<cmd>enew<cr>', 'New Buffer' },
-          n = { '<cmd>bnext<cr>', 'Next Buffer' },
-          b = { '<cmd>bprevious<cr>', 'Previous Buffer' },
-        },
+        { '<leader>T', group = 'Toggle' },
+        { '<leader>T_', hidden = true },
 
-        ['T'] = { name = 'Toggle', _ = 'which_key_ignore' },
-        ['e'] = { 'NeoTree reveal', _ = 'which_key_ignore' },
-        ['w'] = { '<cmd>w!<CR>', 'Save' },
-        ['c'] = { '<cmd>BufferKill<CR>', 'Close Buffer' },
-        ['q'] = { '<cmd>confirm q<CR>', 'Quit' },
-        ['/'] = { '<Plug>(comment_toggle_linewise_current)', 'Comment toggle current line' },
-      }, {
-        prefix = '<leader>',
+        { '<leader>b', group = 'Buffer' },
+        { '<leader>bN', '<cmd>enew<cr>', desc = 'New Buffer' },
+        { '<leader>bb', '<cmd>bprevious<cr>', desc = 'Previous Buffer' },
+        { '<leader>bn', '<cmd>bnext<cr>', desc = 'Next Buffer' },
+
+        { '<leader>e', desc = 'NeoTree reveal' },
+        { '<leader>e_', hidden = true },
+        { '<leader>q', '<cmd>confirm q<CR>', desc = 'Quit' },
+        { '<leader>w', '<cmd>w!<CR>', desc = 'Save' },
+        { '<leader>c', '<cmd>BufferKill<CR>', desc = 'Close Buffer' },
       })
     end,
   },

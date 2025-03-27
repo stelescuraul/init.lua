@@ -21,6 +21,7 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
+    local whichkey = require 'which-key'
 
     require('mason-nvim-dap').setup {
       automatic_installation = true,
@@ -129,6 +130,25 @@ return {
     vim.keymap.set('n', '<F2>', dap.step_into, { desc = 'Debug: Step Into' })
     vim.keymap.set('n', '<F3>', dap.step_over, { desc = 'Debug: Step Over' })
     vim.keymap.set('n', '<F4>', dap.step_out, { desc = 'Debug: Step Out' })
+
+    whichkey.add {
+      { '<leader>d', group = 'Debug' },
+      { '<leader>dC', "<cmd>lua require'dap'.run_to_cursor()<cr>", desc = 'Run To Cursor' },
+      { '<leader>dU', "<cmd>lua require'dapui'.toggle({reset = true})<cr>", desc = 'Toggle UI' },
+      { '<leader>db', "<cmd>lua require'dap'.step_back()<cr>", desc = 'Step Back' },
+      { '<leader>dc', "<cmd>lua require'dap'.continue()<cr>", desc = 'Continue' },
+      { '<leader>dd', "<cmd>lua require'dap'.disconnect()<cr>", desc = 'Disconnect' },
+      { '<leader>df', "<cmd>lua require'dapui'.eval()<cr>", desc = 'Toggle floating under cursor' },
+      { '<leader>dg', "<cmd>lua require'dap'.session()<cr>", desc = 'Get Session' },
+      { '<leader>di', "<cmd>lua require'dap'.step_into()<cr>", desc = 'Step Into' },
+      { '<leader>do', "<cmd>lua require'dap'.step_over()<cr>", desc = 'Step Over' },
+      { '<leader>dp', "<cmd>lua require'dap'.pause()<cr>", desc = 'Pause' },
+      { '<leader>dq', "<cmd>lua require'dap'.close()<cr>", desc = 'Quit' },
+      { '<leader>dr', "<cmd>lua require'dap'.repl.toggle()<cr>", desc = 'Toggle Repl' },
+      { '<leader>ds', "<cmd>lua require'dap'.continue()<cr>", desc = 'Start' },
+      { '<leader>dt', "<cmd>lua require'dap'.toggle_breakpoint()<cr>", desc = 'Toggle Breakpoint' },
+      { '<leader>du', "<cmd>lua require'dap'.step_out()<cr>", desc = 'Step Out' },
+    }
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|

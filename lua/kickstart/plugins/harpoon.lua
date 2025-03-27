@@ -18,43 +18,44 @@ return {
         },
       }
 
-      wk.register({
-        ['a'] = {
-          name = 'Harpoon',
-          a = {
-            function()
-              harpoon:list():add()
-            end,
-            'Add',
-          },
-          q = {
-            function()
-              harpoon:list():select(1)
-            end,
-            'Buffer 1',
-          },
-          w = {
-            function()
-              harpoon:list():select(2)
-            end,
-            'Buffer 2',
-          },
-          e = {
-            function()
-              harpoon:list():select(3)
-            end,
-            'Buffer 3',
-          },
-          r = {
-            function()
-              harpoon:list():select(4)
-            end,
-            'Buffer 4',
-          },
+      wk.add {
+        { '<leader>a', group = 'Harpoon' },
+        {
+          '<leader>aa',
+          function()
+            harpoon:list():add()
+          end,
+          desc = 'Add',
         },
-      }, {
-        prefix = '<leader>',
-      })
+        {
+          '<leader>aq',
+          function()
+            harpoon:list():select(1)
+          end,
+          desc = 'Buffer 3',
+        },
+        {
+          '<leader>aw',
+          function()
+            harpoon:list():select(2)
+          end,
+          desc = 'Buffer 1',
+        },
+        {
+          '<leader>ae',
+          function()
+            harpoon:list():select(3)
+          end,
+          desc = 'Buffer 4',
+        },
+        {
+          '<leader>ar',
+          function()
+            harpoon:list():select(4)
+          end,
+          desc = 'Buffer 2',
+        },
+      }
 
       utils.map('<C-e>', function()
         harpoon.ui:toggle_quick_menu(harpoon:list())
