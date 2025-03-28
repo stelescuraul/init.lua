@@ -47,9 +47,9 @@ vim.api.nvim_set_keymap('i', '<M-l>', 'copilot#Accept("<CR>")', { silent = true,
 vim.keymap.set('v', '<leader>/', '<Plug>(comment_toggle_linewise_visual)')
 
 -- Window size management
-utils.map('<C-Up>', '<cmd>resize +2<cr>', 'Increase Window Height')
-utils.map('<C-Down>', '<cmd>resize -2<cr>', 'Decrease Window Height')
-utils.map('<C-Left>', '<cmd>vertical resize -2<cr>', 'Decrease Window Width')
-utils.map('<C-Right>', '<cmd>vertical resize +2<cr>', 'Increase Window Width')
+utils.map('<M-Up>', '<cmd>resize +2<cr>', 'Increase Window Height')
+utils.map('<M-Down>', '<cmd>resize -2<cr>', 'Decrease Window Height')
+utils.map('<M-Left>', '<cmd>vertical resize -2<cr>', 'Decrease Window Width')
+utils.map('<M-Right>', '<cmd>vertical resize +2<cr>', 'Increase Window Width')
 
 

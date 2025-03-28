@@ -24,13 +24,9 @@ return {
         nerd_font = vim.g.have_nerd_font,
       }
 
-      wk.register({
-        ['b'] = {
-          a = { '<cmd>AerialToggle!<cr>', 'Aerial' },
-        },
-      }, {
-        prefix = '<leader>',
-      })
+      wk.add {
+        { '<leader>ba', '<cmd>AerialToggle!<cr>', desc = 'Aerial' },
+      }
     end,
   },
 }

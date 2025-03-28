@@ -51,28 +51,19 @@ return {
           -- Open float window with diagnostic under cursor
           utils.map('gl', '<cmd>lua vim.diagnostic.open_float()<cr>', 'Show diagnostic')
 
-          wk.register({
-            ['l'] = {
-              name = 'LSP',
-              -- Fuzzy find all the symbols in your current document.
-              --  Symbols are things like variables, functions, types, etc.
-              s = { builtin.lsp_document_symbols, 'Document Symbols' },
-              -- Fuzzy find all the symbols in your current workspace.
-              --  Similar to document symbols, except searches over your entire project.
-              S = { builtin.lsp_dynamic_workspace_symbols, 'Workspace Symbols' },
-              a = { '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Code Action' },
-              -- could add: theme=get_ivy to the cmd to make it stick to the bottom
-              d = { '<cmd>Telescope diagnostics bufnr=0<cr>', 'Buffer Diagnostics' },
-              D = { builtin.diagnostics, 'Workspace Diagnostics' },
-              i = { '<cmd>LspInfo<cr>', 'Lsp Info' },
-              n = { '<cmd>lua vim.diagnostic.goto_next()<cr>', 'Next Diagnostic' },
-              p = { '<cmd>lua vim.diagnostic.goto_prev()<cr>', 'Prev Diagnostic' },
-              o = { '<cmd>LspOrganize<cr>', 'Organize Imports' },
-              r = { vim.lsp.buf.rename, 'Rename' },
-            },
-          }, {
-            prefix = '<leader>',
-          })
+          wk.add {
+            { '<leader>l', group = 'LSP' },
+            { '<leader>lD', builtin.diagnostics, desc = 'Workspace Diagnostics' },
+            { '<leader>lS', builtin.lsp_dynamic_workspace_symbols, desc = 'Workspace Symbols' },
+            { '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', desc = 'Code Action' },
+            { '<leader>ld', '<cmd>Telescope diagnostics bufnr=0<cr>', desc = 'Buffer Diagnostics' },
+            { '<leader>li', '<cmd>LspInfo<cr>', desc = 'Lsp Info' },
+            { '<leader>ln', '<cmd>lua vim.diagnostic.goto_next()<cr>', desc = 'Next Diagnostic' },
+            { '<leader>lo', '<cmd>LspOrganize<cr>', desc = 'Organize Imports' },
+            { '<leader>lp', '<cmd>lua vim.diagnostic.goto_prev()<cr>', desc = 'Prev Diagnostic' },
+            { '<leader>lr', vim.lsp.buf.rename, desc = 'Rename' },
+            { '<leader>ls', builtin.lsp_document_symbols, desc = 'Document Symbols' },
+          }
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
@@ -266,13 +257,11 @@ return {
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      ---@diagnostic disable-next-line: missing-fields
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            -- if server == 'tsserver' then
-            --   return
-            -- end
 
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling

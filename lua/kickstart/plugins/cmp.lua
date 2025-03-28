@@ -112,8 +112,8 @@ return {
           format = function(entry, vim_item)
             vim_item.kind = (icons.cmp[vim_item.kind] or '') .. vim_item.kind
             vim_item.menu = ({
-              buffer = '[Buffer]',
               nvim_lsp = '[LSP]',
+              buffer = '[Buffer]',
               luasnip = '[LuaSnip]',
               nvim_lua = '[Lua]',
             })[entry.source.name]

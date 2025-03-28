@@ -13,40 +13,28 @@ require('lazy').setup({
   -- modular approach: using `require 'path/name'` will
   -- include a plugin definition from file lua/path/name.lua
 
-  require 'kickstart/plugins/gitsigns',
-
-  require 'kickstart/plugins/telescope',
-
   -- require 'kickstart/plugins/coc',
-
-  require 'kickstart/plugins/lspconfig',
-
-  require 'kickstart/plugins/conform',
-
-  require 'kickstart/plugins/cmp',
-
   -- require 'kickstart/plugins/tokyonight',
+  -- require 'kickstart.plugins.aerial',
+  -- require 'kickstart.plugins.typescript-tools',
+
+  require 'kickstart/plugins/gitsigns',
+  require 'kickstart/plugins/telescope',
+  require 'kickstart/plugins/lspconfig',
+  require 'kickstart/plugins/conform',
+  require 'kickstart/plugins/cmp',
   require 'kickstart/plugins/rose-pine',
-
   require 'kickstart/plugins/todo-comments',
-
   require 'kickstart/plugins/mini',
-
   require 'kickstart/plugins/treesitter',
-
   require 'kickstart.plugins.treesitter-context',
-
   require 'kickstart/plugins/harpoon',
-
   require 'kickstart/plugins/copilot',
-
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.aerial',
   require 'kickstart.plugins.markdown-preview',
-  -- require 'kickstart.plugins.typescript-tools',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -77,21 +65,17 @@ require('lazy').setup({
 })
 
 local wk = require 'which-key'
-wk.register({
-  ['P'] = {
-    name = 'Plugins',
-    i = { '<cmd>Lazy install<cr>', 'Install' },
-    s = { '<cmd>Lazy sync<cr>', 'Sync' },
-    S = { '<cmd>Lazy clear<cr>', 'Status' },
-    c = { '<cmd>Lazy clean<cr>', 'Clean' },
-    u = { '<cmd>Lazy update<cr>', 'Update' },
-    p = { '<cmd>Lazy profile<cr>', 'Profile' },
-    l = { '<cmd>Lazy log<cr>', 'Log' },
-    d = { '<cmd>Lazy debug<cr>', 'Debug' },
-    m = { '<cmd>Mason<cr>', 'Mason Info' },
-  },
-}, {
-  prefix = '<leader>',
-})
+wk.add {
+  { '<leader>P', group = 'Plugins' },
+  { '<leader>PS', '<cmd>Lazy clear<cr>', desc = 'Status' },
+  { '<leader>Pc', '<cmd>Lazy clean<cr>', desc = 'Clean' },
+  { '<leader>Pd', '<cmd>Lazy debug<cr>', desc = 'Debug' },
+  { '<leader>Pi', '<cmd>Lazy install<cr>', desc = 'Install' },
+  { '<leader>Pl', '<cmd>Lazy log<cr>', desc = 'Log' },
+  { '<leader>Pm', '<cmd>Mason<cr>', desc = 'Mason Info' },
+  { '<leader>Pp', '<cmd>Lazy profile<cr>', desc = 'Profile' },
+  { '<leader>Ps', '<cmd>Lazy sync<cr>', desc = 'Sync' },
+  { '<leader>Pu', '<cmd>Lazy update<cr>', desc = 'Update' },
+}
 
 -- vim: ts=2 sts=2 sw=2 et

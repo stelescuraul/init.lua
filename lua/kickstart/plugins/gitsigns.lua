@@ -53,7 +53,13 @@ return {
         wk.add {
           { '<leader>g', group = 'Git' },
           { '<leader>gl', gitsigns.blame_line, desc = 'Blame' },
-          { '<leader>gL', gitsigns.blame_line { full = true }, desc = 'Blame Line (full)' },
+          {
+            '<leader>gL',
+            function()
+              gitsigns.blame_line { full = true }
+            end,
+            desc = 'Blame Line (full)',
+          },
           { '<leader>gp', gitsigns.preview_hunk, desc = 'Preview Hunk' },
           { '<leader>gr', gitsigns.reset_hunk, desc = 'Reset Hunk' },
           { '<leader>gR', gitsigns.reset_buffer, desc = 'Reset Buffer' },

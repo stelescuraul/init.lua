@@ -42,7 +42,6 @@ return {
         { '<leader>/', '<Plug>(comment_toggle_linewise_current)', desc = 'Comment toggle current line' },
 
         { '<leader>T', group = 'Toggle' },
-        { '<leader>T_', hidden = true },
 
         { '<leader>b', group = 'Buffer' },
         { '<leader>bN', '<cmd>enew<cr>', desc = 'New Buffer' },
@@ -50,7 +49,6 @@ return {
         { '<leader>bn', '<cmd>bnext<cr>', desc = 'Next Buffer' },
 
         { '<leader>e', desc = 'NeoTree reveal' },
-        { '<leader>e_', hidden = true },
         { '<leader>q', '<cmd>confirm q<CR>', desc = 'Quit' },
         { '<leader>w', '<cmd>w!<CR>', desc = 'Save' },
         { '<leader>c', '<cmd>BufferKill<CR>', desc = 'Close Buffer' },

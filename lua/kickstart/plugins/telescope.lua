@@ -105,48 +105,48 @@ return {
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
 
-      wk.register({
-        ['s'] = {
-          name = 'Search',
-          h = { builtin.help_tags, 'Search Help' },
-          k = { builtin.keymaps, 'Search Keymaps' },
-          f = {
-            function()
-              builtin.find_files { find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' } }
-            end,
-            'Search All Files',
-          },
-          F = {
-            builtin.current_buffer_fuzzy_find,
-            'Fuzzy find in buffer',
-          },
-          s = { builtin.builtin, 'Search Telescope' },
-          w = { builtin.grep_string, 'Search Word' },
-          t = { builtin.live_grep, 'Search Grep' },
-          l = { builtin.resume, 'Resume Last Search' },
-          ['.'] = { builtin.oldfiles, 'Search Recent Files' },
-          p = {
-            function()
-              builtin.colorscheme { enable_preview = true }
-            end,
-            'Colorscheme with Preview',
-          },
-          c = {
-            function()
-              builtin.find_files { cwd = vim.fn.stdpath 'config' }
-            end,
-            'Sarch Neovim config files',
-          },
+      wk.add {
+        { '<leader>bf', builtin.find_files, desc = 'Find Buffers' },
+        {
+          '<leader>f',
+          function()
+            builtin.find_files { find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' } }
+          end,
+          desc = 'Search files',
         },
-        ['f'] = { builtin.find_files, 'Search files' },
-        ['b'] = {
-          f = { builtin.buffers, 'Find Buffers' },
-        },
-      }, {
-        prefix = '<leader>',
-      })
 
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Find existing buffers' })
+        { '<leader>s', group = 'Search' },
+        { '<leader>s.', builtin.oldfiles, desc = 'Search Recent Files' },
+        { '<leader>sF', builtin.current_buffer_fuzzy_find, desc = 'Fuzzy find in buffer' },
+        {
+          '<leader>sc',
+          function()
+            builtin.find_files { cwd = vim.fn.stdpath 'config' }
+          end,
+          desc = 'Sarch Neovim config files',
+        },
+        {
+          '<leader>sf',
+          function()
+            builtin.find_files { find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' } }
+          end,
+          desc = 'Search All Files',
+        },
+        { '<leader>sh', builtin.help_tags, desc = 'Search Help' },
+        { '<leader>sk', builtin.keymaps, desc = 'Search Keymaps' },
+        { '<leader>sl', builtin.resume, desc = 'Resume Last Search' },
+        {
+          '<leader>sp',
+          function()
+            builtin.colorscheme { enable_preview = true }
+          end,
+          desc = 'Colorscheme with Preview',
+        },
+        { '<leader>ss', builtin.builtin, desc = 'Search Telescope' },
+        { '<leader>st', builtin.live_grep, desc = 'Search Grep' },
+        { '<leader>sw', builtin.grep_string, desc = 'Search Word' },
+        { '<leader><leader>', builtin.buffers, desc = 'Find existing buffers' },
+      }
     end,
   },
 }
