@@ -17,6 +17,8 @@ require('lazy').setup({
   -- require 'kickstart/plugins/tokyonight',
   -- require 'kickstart.plugins.aerial',
   -- require 'kickstart.plugins.typescript-tools',
+  require 'kickstart/plugins/treesitter',
+  require 'kickstart/plugins/treesitter-context',
 
   require 'kickstart/plugins/gitsigns',
   require 'kickstart/plugins/telescope',
@@ -26,8 +28,6 @@ require('lazy').setup({
   require 'kickstart/plugins/rose-pine',
   require 'kickstart/plugins/todo-comments',
   require 'kickstart/plugins/mini',
-  require 'kickstart/plugins/treesitter',
-  require 'kickstart.plugins.treesitter-context',
   require 'kickstart/plugins/harpoon',
   require 'kickstart/plugins/copilot',
   require 'kickstart.plugins.debug',
