@@ -8,6 +8,7 @@ require('lazy').setup({
     'stevearc/dressing.nvim',
     opts = {},
   },
+  { 'EdenEast/nightfox.nvim', name = 'nightfox', priority = 1000 },
 
   require 'kickstart/plugins/which-key',
   -- modular approach: using `require 'path/name'` will
@@ -35,6 +36,8 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.markdown-preview',
+
+  require 'kickstart.plugins.gitlinker',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
