@@ -7,12 +7,16 @@ return {
       return not vim.g.vscode
     end,
     dependencies = {
-      { 'williamboman/mason.nvim', config = true },
-      { 'williamboman/mason-lspconfig.nvim', opts = {
-        ensure_installed = {
-          'eslint@4.8.0',
+      { 'williamboman/mason.nvim', config = true, version = '1.x' },
+      {
+        'williamboman/mason-lspconfig.nvim',
+        version = '1.x',
+        opts = {
+          ensure_installed = {
+            'eslint@4.8.0',
+          },
         },
-      } },
+      },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -146,7 +150,7 @@ return {
         -- },
         -- eslint = {},
         -- eslint_d = {},
-        -- ['eslint-lsp'] = {},
+        ['eslint-lsp'] = {},
         prettierd = {},
         --
 
@@ -192,7 +196,11 @@ return {
                 propertyDeclarationTypes = { enabled = true },
                 variableTypes = { enabled = false },
               },
+              implicitProjectConfig = {
+                checkJs = true, -- enable type checking for JavaScript files
+              },
             },
+
             typescript = {
               format = {
                 enable = false,
@@ -202,7 +210,10 @@ return {
               updateImportsOnFileMove = { enabled = 'always' },
               suggest = { completeFunctionCalls = true },
               tsserver = {
-                maxTsServerMemory = 5120,
+                maxTsServerMemory = 1024 * 5,
+              },
+              implicitProjectConfig = {
+                checkJs = true, -- enable type checking for JavaScript files
               },
               inlayHints = {
                 enumMemberValues = { enabled = true },
@@ -220,14 +231,32 @@ return {
                 return
               end
 
+              local diagnostic_bufnr = vim.uri_to_bufnr(result.uri)
+              local current_bufnr = vim.api.nvim_get_current_buf()
+
+              -- If the diagnostic is not for the buffer you are looking at, do nothing.
+              if diagnostic_bufnr ~= current_bufnr then
+                vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
+                return
+              end
+
+              local filetype = vim.api.nvim_buf_get_option(current_bufnr, 'filetype')
+
               -- ignore some tsserver diagnostics
               local idx = 1
               while idx <= #result.diagnostics do
                 local entry = result.diagnostics[idx]
 
                 -- codes: https://github.com/microsoft/TypeScript/blob/main/src/compiler/diagnosticMessages.json
-                if entry.code == 80001 then
+
+                if
                   -- { message = "File is a CommonJS module; it may be converted to an ES module.", }
+                  entry.code == 80001
+                  -- { message = "Parameter 'x' implicitly has an 'any' type." }
+                  -- { message = "Variable 'x' implicitly has an 'any' type." }
+                  or ((entry.code == 7006 or entry.code == 7031) and filetype == 'javascript')
+                then
+                  -- This error will only be removed for javascript files
                   table.remove(result.diagnostics, idx)
                 else
                   idx = idx + 1
@@ -257,8 +286,10 @@ return {
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      ---@diagnostic disable-next-line: missing-fields
       require('mason-lspconfig').setup {
+        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        automatic_installation = false,
+
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
