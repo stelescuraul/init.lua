@@ -9,7 +9,8 @@ return {
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
-    branch = '0.1.x',
+    -- branch = '0.1.x',
+    branch = 'master',
     cond = function()
       return not vim.g.vscode
     end,
@@ -26,6 +27,17 @@ return {
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
+      local transform_mod = require('telescope.actions.mt').transform_mod
+      local actions = require 'telescope.actions'
+
+      local window_picker = transform_mod {
+        select = function(prompt_bufnr)
+          local action_state = require 'telescope.actions.state'
+          local picker = action_state.get_current_picker(prompt_bufnr)
+          picker.original_win_id = require('window-picker').pick_window()
+        end,
+      }
+
       -- Two important keymaps to use while in Telescope are:
       --  - Insert mode: <c-/>
       --  - Normal mode: ?
@@ -37,11 +49,13 @@ return {
               ['<C-j>'] = 'move_selection_next',
               ['<C-k>'] = 'move_selection_previous',
               ['<C-h>'] = 'which_key',
+              ['<C-o>'] = window_picker.select + actions.select_default,
             },
             -- for normal mode
             n = {
               ['<C-j>'] = 'move_selection_next',
               ['<C-k>'] = 'move_selection_previous',
+              ['<C-o>'] = window_picker.select + actions.select_default,
             },
           },
           layout_config = {
@@ -72,7 +86,11 @@ return {
             },
           },
           layout_strategy = 'flex',
-          -- path_display
+          path_display = {
+            filename_first = {
+              reverse_directories = false
+            }
+          }
         },
         -- pickers = {}
         extensions = {
@@ -84,9 +102,6 @@ return {
           buffers = {
             initial_mode = 'normal',
             mappings = {
-              --   i = {
-              --     ['<C-d>'] = require('telescope.actions').delete_buffer,
-              --   },
               n = {
                 ['dd'] = function(buffnr)
                   require('telescope.actions').delete_buffer(buffnr)
