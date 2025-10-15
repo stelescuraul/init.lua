@@ -18,44 +18,44 @@ return {
         },
       }
 
-      wk.add {
-        { '<leader>a', group = 'Harpoon' },
-        {
-          '<leader>aa',
-          function()
-            harpoon:list():add()
-          end,
-          desc = 'Add',
-        },
-        {
-          '<leader>aq',
-          function()
-            harpoon:list():select(1)
-          end,
-          desc = 'Buffer 3',
-        },
-        {
-          '<leader>aw',
-          function()
-            harpoon:list():select(2)
-          end,
-          desc = 'Buffer 1',
-        },
-        {
-          '<leader>ae',
-          function()
-            harpoon:list():select(3)
-          end,
-          desc = 'Buffer 4',
-        },
-        {
-          '<leader>ar',
-          function()
-            harpoon:list():select(4)
-          end,
-          desc = 'Buffer 2',
-        },
-      }
+      -- wk.add {
+      --   { '<leader>a', group = 'Harpoon' },
+      --   {
+      --     '<leader>aa',
+      --     function()
+      --       harpoon:list():add()
+      --     end,
+      --     desc = 'Add',
+      --   },
+      --   {
+      --     '<leader>aq',
+      --     function()
+      --       harpoon:list():select(1)
+      --     end,
+      --     desc = 'Buffer 3',
+      --   },
+      --   {
+      --     '<leader>aw',
+      --     function()
+      --       harpoon:list():select(2)
+      --     end,
+      --     desc = 'Buffer 1',
+      --   },
+      --   {
+      --     '<leader>ae',
+      --     function()
+      --       harpoon:list():select(3)
+      --     end,
+      --     desc = 'Buffer 4',
+      --   },
+      --   {
+      --     '<leader>ar',
+      --     function()
+      --       harpoon:list():select(4)
+      --     end,
+      --     desc = 'Buffer 2',
+      --   },
+      -- }
 
       utils.map('<C-e>', function()
         harpoon.ui:toggle_quick_menu(harpoon:list())
