@@ -14,7 +14,6 @@ require('lazy').setup({
   -- modular approach: using `require 'path/name'` will
   -- include a plugin definition from file lua/path/name.lua
 
-  -- require 'kickstart/plugins/coc',
   -- require 'kickstart/plugins/tokyonight',
   -- require 'kickstart.plugins.aerial',
   -- require 'kickstart.plugins.typescript-tools',
@@ -38,6 +37,8 @@ require('lazy').setup({
   require 'kickstart.plugins.markdown-preview',
 
   require 'kickstart.plugins.gitlinker',
+
+  require 'kickstart.plugins.avante',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
