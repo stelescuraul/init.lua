@@ -29,5 +29,9 @@ return {
     opts = {
       print_url = true,
     },
+
+    cond = function()
+      return not vim.g.vscode
+    end,
   },
 }

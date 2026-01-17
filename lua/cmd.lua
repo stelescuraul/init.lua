@@ -19,3 +19,34 @@
 -- vim.cmd 'command! LspOrganize lua lsp_organize_imports_sync()'
 
 vim.cmd 'command! LspOrganize VtsExec organize_imports'
+
+local function fix_all(opts)
+  opts = opts or {}
+
+  local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
+  vim.validate('bufnr', bufnr, 'number')
+
+  local client = opts.client or vim.lsp.get_clients({ bufnr = bufnr, name = 'eslint' })[1]
+
+  if not client then
+    return
+  end
+
+  local request = function(buf, method, params)
+    client:request(method, params, nil, buf)
+  end
+
+  request(bufnr, 'workspace/executeCommand', {
+    command = 'eslint.applyAllFixes',
+    arguments = {
+      {
+        uri = vim.uri_from_bufnr(bufnr),
+        version = vim.lsp.util.buf_versions[bufnr],
+      },
+    },
+  })
+end
+
+vim.api.nvim_create_user_command('EslintFixAll', function()
+  fix_all {}
+end, {})

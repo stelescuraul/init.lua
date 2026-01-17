@@ -39,7 +39,7 @@ return {
   cmd = 'Neotree',
   keys = {
     { '<leader>e', ':Neotree reveal<CR>', { desc = 'NeoTree reveal' } },
-    { '<leader>ba', ':Neotree document_symbols<cr>', { desc = 'Document symbols' } },
+    { '<leader>bs', ':Neotree document_symbols<cr>', { desc = 'Document symbols' } },
   },
   opts = {
     filesystem = {

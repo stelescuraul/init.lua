@@ -6,6 +6,9 @@ return {
     build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
     event = 'VeryLazy',
     version = false, -- Never set this value to "*"! Never!
+    cond = function()
+      return not vim.g.vscode
+    end,
     opts = {
       instructions_file = 'avante.md',
       provider = 'copilot',

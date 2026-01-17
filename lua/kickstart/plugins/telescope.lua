@@ -5,6 +5,8 @@
 --
 -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
+local utils = require 'kickstart.utils'
+
 return {
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
@@ -29,6 +31,7 @@ return {
     config = function()
       local transform_mod = require('telescope.actions.mt').transform_mod
       local actions = require 'telescope.actions'
+      local telescope = require 'telescope'
 
       local window_picker = transform_mod {
         select = function(prompt_bufnr)
@@ -88,9 +91,9 @@ return {
           layout_strategy = 'flex',
           path_display = {
             filename_first = {
-              reverse_directories = false
-            }
-          }
+              reverse_directories = false,
+            },
+          },
         },
         -- pickers = {}
         extensions = {
@@ -104,7 +107,7 @@ return {
             mappings = {
               n = {
                 ['dd'] = function(buffnr)
-                  require('telescope.actions').delete_buffer(buffnr)
+                  actions.delete_buffer(buffnr)
                 end,
               },
             },
@@ -113,12 +116,24 @@ return {
       }
 
       -- Enable Telescope extensions if they are installed
-      pcall(require('telescope').load_extension, 'fzf')
-      pcall(require('telescope').load_extension, 'ui-select')
+      telescope.load_extension 'fzf'
+      telescope.load_extension 'ui-select'
+
+      -- load our local extension file:
+      telescope.load_extension 'qf_replace'
 
       local wk = require 'which-key'
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
+
+      -- keymaps
+      utils.map('<leader>sr', function()
+        telescope.extensions.qf_replace.qf_replace { mode = 'buffer' }
+      end, 'Search/Replace (buffer)')
+
+      utils.map('<leader>sR', function()
+        telescope.extensions.qf_replace.qf_replace { mode = 'files' }
+      end, 'Search/Replace (files)')
 
       wk.add {
         { '<leader>bf', builtin.find_files, desc = 'Find Buffers' },

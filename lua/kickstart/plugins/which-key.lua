@@ -17,6 +17,9 @@ return {
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    -- cond = function()
+    --   return not vim.g.vscode
+    -- end,
     config = function() -- This is the function that runs, AFTER loading
       require('which-key').setup {
         plugins = {
@@ -38,7 +41,7 @@ return {
       }
 
       -- Document existing key chains
-      require('which-key').add({
+      require('which-key').add {
         { '<leader>/', '<Plug>(comment_toggle_linewise_current)', desc = 'Comment toggle current line' },
 
         { '<leader>T', group = 'Toggle' },
@@ -52,7 +55,7 @@ return {
         { '<leader>q', '<cmd>confirm q<CR>', desc = 'Quit' },
         { '<leader>w', '<cmd>w!<CR>', desc = 'Save' },
         { '<leader>c', '<cmd>BufferKill<CR>', desc = 'Close Buffer' },
-      })
+      }
     end,
   },
 }

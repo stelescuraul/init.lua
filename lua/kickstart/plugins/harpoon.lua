@@ -9,7 +9,7 @@ return {
     end,
     config = function()
       local harpoon = require 'harpoon'
-      local wk = require 'which-key'
+      -- local wk = require 'which-key'
 
       harpoon:setup {
         settings = {
@@ -17,6 +17,10 @@ return {
           sync_on_ui_close = true,
         },
       }
+
+      utils.map('<leader>ba', function()
+        harpoon:list():add()
+      end, 'Add buffer')
 
       -- wk.add {
       --   { '<leader>a', group = 'Harpoon' },

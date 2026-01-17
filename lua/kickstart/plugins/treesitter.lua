@@ -3,6 +3,9 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs',
+    cond = function()
+      return not vim.g.vscode
+    end,
     lazy = false,
     opts = {
       ensure_installed = {
