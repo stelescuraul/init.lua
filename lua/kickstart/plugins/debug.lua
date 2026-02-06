@@ -46,6 +46,17 @@ return {
 
     local js_based_languages = { 'typescript', 'javascript' }
 
+    local function pick_node_process_and_usr1()
+      local pid = require('dap.utils').pick_process()
+      if pid then
+        -- Start inspector on a non-debug Node process (same trick VS Code uses)
+        vim.fn.system { 'kill', '-USR1', tostring(pid) }
+        -- small delay to let node open the inspector port
+        vim.wait(150)
+      end
+      return pid
+    end
+
     for _, language in ipairs(js_based_languages) do
       require('dap').configurations[language] = {
         {
@@ -59,8 +70,13 @@ return {
           type = 'pwa-node',
           request = 'attach',
           name = 'Attach',
-          processId = require('dap.utils').pick_process,
+          -- processId = require('dap.utils').pick_process,
+          processId = pick_node_process_and_usr1,
+          skipFiles = { '<node_internals>/**', 'node_modules/**' },
           cwd = '${workspaceFolder}',
+          resolveSourceMapLocations = { '**', '!**/node_modules/**' },
+          console = 'integratedTerminal',
+          outputCapture = 'integratedTerminal',
         },
         -- {
         --   type = 'pwa-chrome',
