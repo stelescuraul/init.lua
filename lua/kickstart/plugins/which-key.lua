@@ -55,6 +55,17 @@ return {
         { '<leader>q', '<cmd>confirm q<CR>', desc = 'Quit' },
         { '<leader>w', '<cmd>w!<CR>', desc = 'Save' },
         { '<leader>c', '<cmd>BufferKill<CR>', desc = 'Close Buffer' },
+
+        { '<leader>P', group = 'Plugins' },
+        { '<leader>PS', '<cmd>Lazy clear<cr>', desc = 'Status' },
+        { '<leader>Pc', '<cmd>Lazy clean<cr>', desc = 'Clean' },
+        { '<leader>Pd', '<cmd>Lazy debug<cr>', desc = 'Debug' },
+        { '<leader>Pi', '<cmd>Lazy install<cr>', desc = 'Install' },
+        { '<leader>Pl', '<cmd>Lazy log<cr>', desc = 'Log' },
+        { '<leader>Pm', '<cmd>Mason<cr>', desc = 'Mason Info' },
+        { '<leader>Pp', '<cmd>Lazy profile<cr>', desc = 'Profile' },
+        { '<leader>Ps', '<cmd>Lazy sync<cr>', desc = 'Sync' },
+        { '<leader>Pu', '<cmd>Lazy update<cr>', desc = 'Update' },
       }
     end,
   },

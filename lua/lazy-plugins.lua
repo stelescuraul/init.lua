@@ -38,7 +38,10 @@ require('lazy').setup({
 
   require 'kickstart.plugins.gitlinker',
 
-  require 'kickstart.plugins.avante',
+  require 'kickstart.plugins.github',
+  -- require 'kickstart.plugins.avante',
+  require 'kickstart.plugins.sidekick',
+  require 'kickstart.plugins.lazygit',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -67,19 +70,5 @@ require('lazy').setup({
     },
   },
 })
-
-local wk = require 'which-key'
-wk.add {
-  { '<leader>P', group = 'Plugins' },
-  { '<leader>PS', '<cmd>Lazy clear<cr>', desc = 'Status' },
-  { '<leader>Pc', '<cmd>Lazy clean<cr>', desc = 'Clean' },
-  { '<leader>Pd', '<cmd>Lazy debug<cr>', desc = 'Debug' },
-  { '<leader>Pi', '<cmd>Lazy install<cr>', desc = 'Install' },
-  { '<leader>Pl', '<cmd>Lazy log<cr>', desc = 'Log' },
-  { '<leader>Pm', '<cmd>Mason<cr>', desc = 'Mason Info' },
-  { '<leader>Pp', '<cmd>Lazy profile<cr>', desc = 'Profile' },
-  { '<leader>Ps', '<cmd>Lazy sync<cr>', desc = 'Sync' },
-  { '<leader>Pu', '<cmd>Lazy update<cr>', desc = 'Update' },
-}
 
 -- vim: ts=2 sts=2 sw=2 et

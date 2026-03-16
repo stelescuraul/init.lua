@@ -10,9 +10,10 @@ local utils = require 'kickstart.utils'
 return {
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
+    -- event = 'VimEnter',
     -- branch = '0.1.x',
-    branch = 'master',
+    -- branch = 'master',
+    version = '*',
     cond = function()
       return not vim.g.vscode
     end,
