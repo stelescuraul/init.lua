@@ -1,22 +1,26 @@
 require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
-
-  {
-    'stevearc/dressing.nvim',
-    opts = {},
-  },
   { 'EdenEast/nightfox.nvim', name = 'nightfox', priority = 1000 },
 
   require 'kickstart/plugins/which-key',
+
   -- modular approach: using `require 'path/name'` will
   -- include a plugin definition from file lua/path/name.lua
 
   -- require 'kickstart/plugins/tokyonight',
   -- require 'kickstart.plugins.aerial',
   -- require 'kickstart.plugins.typescript-tools',
+  { 'stevearc/dressing.nvim', opts = {} },
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
+    },
+  },
   require 'kickstart/plugins/treesitter',
   require 'kickstart/plugins/treesitter-context',
 

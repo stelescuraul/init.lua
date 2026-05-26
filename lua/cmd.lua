@@ -18,13 +18,21 @@
 -- end
 -- vim.cmd 'command! LspOrganize lua lsp_organize_imports_sync()'
 
-vim.cmd 'command! LspOrganize VtsExec organize_imports'
+vim.api.nvim_create_user_command('LspOrganize', function()
+  vim.lsp.buf.code_action {
+    apply = true,
+    context = {
+      only = { 'source.organizeImports' },
+      diagnostics = {},
+    },
+  }
+end, { desc = 'Organize imports' })
 
 local function fix_all(opts)
   opts = opts or {}
 
   local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
-  vim.validate('bufnr', bufnr, 'number')
+  vim.validate { bufnr = { bufnr, 'number' } }
 
   local client = opts.client or vim.lsp.get_clients({ bufnr = bufnr, name = 'eslint' })[1]
 

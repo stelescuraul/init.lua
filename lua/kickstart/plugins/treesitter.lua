@@ -1,14 +1,20 @@
 return {
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs',
     cond = function()
       return not vim.g.vscode
     end,
     lazy = false,
-    opts = {
-      ensure_installed = {
+    config = function()
+      local treesitter = require 'nvim-treesitter'
+
+      treesitter.setup {
+        install_dir = vim.fn.stdpath 'data' .. '/site',
+      }
+
+      local parsers = {
         'bash',
         'c',
         'diff',
@@ -22,21 +28,35 @@ return {
         'javascript',
         'json',
         'query',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        -- additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = {
-        enable = true,
-        -- disable = { 'ruby' },
-      },
-    },
+      }
+
+      treesitter.install(parsers)
+
+      local filetypes = {
+        'bash',
+        'c',
+        'diff',
+        'javascript',
+        'json',
+        'lua',
+        'markdown',
+        'query',
+        'sh',
+        'typescript',
+        'vim',
+        'vimdoc',
+      }
+
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('kickstart-treesitter', { clear = true }),
+        pattern = filetypes,
+        callback = function()
+          if pcall(vim.treesitter.start) then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
+    end,
   },
 }
 -- vim: ts=2 sts=2 sw=2 et

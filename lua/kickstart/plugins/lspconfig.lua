@@ -11,23 +11,13 @@ return {
         'williamboman/mason.nvim',
         config = true,
       },
-      {
-        'williamboman/mason-lspconfig.nvim',
-        opts = {
-          ensure_installed = {
-            'eslint',
-          },
-        },
-      },
+      'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
-      -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
-      -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim', opts = {} },
       -- { 'yioneko/nvim-vtsls', event = 'VeryLazy' },
     },
     config = function()
@@ -62,9 +52,9 @@ return {
             { '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', desc = 'Code Action' },
             { '<leader>ld', '<cmd>Telescope diagnostics bufnr=0<cr>', desc = 'Buffer Diagnostics' },
             { '<leader>li', '<cmd>LspInfo<cr>', desc = 'Lsp Info' },
-            { '<leader>ln', '<cmd>lua vim.diagnostic.goto_next()<cr>', desc = 'Next Diagnostic' },
+            { '<leader>ln', '<cmd>lua vim.diagnostic.jump({ count = 1, float = true })<cr>', desc = 'Next Diagnostic' },
             { '<leader>lo', '<cmd>LspOrganize<cr>', desc = 'Organize Imports' },
-            { '<leader>lp', '<cmd>lua vim.diagnostic.goto_prev()<cr>', desc = 'Prev Diagnostic' },
+            { '<leader>lp', '<cmd>lua vim.diagnostic.jump({ count = -1, float = true })<cr>', desc = 'Prev Diagnostic' },
             { '<leader>lr', vim.lsp.buf.rename, desc = 'Rename' },
             { '<leader>ls', builtin.lsp_document_symbols, desc = 'Document Symbols' },
           }
@@ -148,10 +138,7 @@ return {
         -- tsserver = {
         --   filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
         -- },
-        -- eslint = {},
-        -- eslint_d = {},
-        ['eslint-lsp'] = {},
-        prettierd = {},
+        eslint = {},
         --
 
         lua_ls = {
@@ -280,16 +267,17 @@ return {
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
+      local ensure_installed = {
         'stylua', -- Used to format Lua code
         'markdownlint',
-      })
+        'prettierd',
+      }
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        ensure_installed = vim.tbl_keys(servers or {}),
         automatic_installation = false,
+        automatic_enable = false,
       }
 
       for name, config in pairs(servers) do

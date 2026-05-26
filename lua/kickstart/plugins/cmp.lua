@@ -150,6 +150,10 @@ return {
         },
         sources = {
           {
+            name = 'lazydev',
+            group_index = 0,
+          },
+          {
             name = 'nvim_lsp',
             priority = 1000,
             entry_filter = function(entry, ctx)
@@ -158,7 +162,7 @@ return {
                 return false
               end
 
-              return true;
+              return true
             end,
           },
           { name = 'luasnip', priority = 800 },

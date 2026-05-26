@@ -42,7 +42,7 @@ return {
 
       -- Document existing key chains
       require('which-key').add {
-        { '<leader>/', '<Plug>(comment_toggle_linewise_current)', desc = 'Comment toggle current line' },
+        { '<leader>/', desc = 'Comment toggle current line' },
 
         { '<leader>T', group = 'Toggle' },
 
@@ -50,6 +50,7 @@ return {
         { '<leader>bN', '<cmd>enew<cr>', desc = 'New Buffer' },
         { '<leader>bb', '<cmd>bprevious<cr>', desc = 'Previous Buffer' },
         { '<leader>bn', '<cmd>bnext<cr>', desc = 'Next Buffer' },
+        { '<leader>bu', '<cmd>undolist<cr>', desc = 'Undo List' },
 
         { '<leader>e', desc = 'NeoTree reveal' },
         { '<leader>q', '<cmd>confirm q<CR>', desc = 'Quit' },
