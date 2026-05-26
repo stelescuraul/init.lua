@@ -1,4 +1,5 @@
 local utils = require 'kickstart.utils'
+local icons = require 'icons'
 
 return {
   { -- LSP Configuration & Plugins
@@ -61,7 +62,9 @@ return {
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
-          utils.map('K', vim.lsp.buf.hover, 'Hover Documentation')
+          utils.map('K', function()
+            vim.lsp.buf.hover { border = 'rounded' }
+          end, 'Hover Documentation')
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
@@ -105,15 +108,56 @@ return {
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
             end, 'Toggle Inlay Hints')
           end
+
+          if client and client:supports_method 'textDocument/completion' then
+            local chars = {}
+            for i = 32, 126 do
+              chars[#chars + 1] = string.char(i)
+            end
+            client.server_capabilities.completionProvider.triggerCharacters = chars
+
+            vim.lsp.completion.enable(true, client.id, event.buf, {
+              autotrigger = true,
+              convert = function(item)
+                local kind_name = vim.lsp.protocol.CompletionItemKind[item.kind] or 'Text'
+                local kind_labels = {
+                  Function = 'fn',
+                  Method = 'meth',
+                  Variable = 'var',
+                  Field = 'field',
+                  Property = 'prop',
+                  Class = 'class',
+                  Interface = 'iface',
+                  Module = 'module',
+                  File = 'file',
+                  Folder = 'folder',
+                  Snippet = 'snip',
+                  Keyword = 'keyw',
+                }
+                local icon = vim.g.have_nerd_font and icons.kind[kind_name] or ''
+                local label = kind_labels[kind_name] or kind_name:lower()
+                local kind = icon ~= '' and string.format('%s %s', icon, label) or label
+
+                return {
+                  kind = kind,
+                  kind_hlgroup = 'CompletionItemKind' .. kind_name,
+                  menu = item.detail or client.name,
+                }
+              end,
+            })
+
+            vim.api.nvim_create_autocmd('InsertCharPre', {
+              group = vim.api.nvim_create_augroup('kickstart-lsp-completion', { clear = false }),
+              buffer = event.buf,
+              callback = function()
+                vim.lsp.completion.get()
+              end,
+            })
+          end
         end,
       })
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.

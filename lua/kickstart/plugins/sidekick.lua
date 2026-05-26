@@ -13,6 +13,14 @@ return {
     {
       '<tab>',
       function()
+        if vim.fn.pumvisible() == 1 then
+          return '<C-y>'
+        end
+
+        if vim.snippet.active { direction = 1 } then
+          return '<Cmd>lua vim.snippet.jump(1)<CR>'
+        end
+
         -- if there is a next edit, jump to it, otherwise apply it if any
         if require('sidekick').nes_jump_or_apply() then
           return -- jumped or applied
@@ -23,6 +31,7 @@ return {
       end,
       mode = { 'i', 'n' },
       expr = true,
+      replace_keycodes = true,
       desc = 'Goto/Apply Next Edit Suggestion',
     },
     {

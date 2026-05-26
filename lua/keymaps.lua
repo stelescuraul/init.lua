@@ -45,6 +45,48 @@ vim.keymap.set('n', 'N', 'Nzzzv') -- keep cursor in middle when searching
 vim.keymap.set('n', '<leader>/', 'gcc', { desc = 'Comment toggle current line', remap = true })
 vim.keymap.set('v', '<leader>/', 'gc', { desc = 'Comment toggle selection', remap = true })
 
+vim.keymap.set('i', '<C-j>', function()
+  return vim.fn.pumvisible() == 1 and '<C-n>' or '<C-j>'
+end, { desc = 'Select next completion item', expr = true, replace_keycodes = true })
+
+vim.keymap.set('i', '<C-k>', function()
+  return vim.fn.pumvisible() == 1 and '<C-p>' or '<C-k>'
+end, { desc = 'Select previous completion item', expr = true, replace_keycodes = true })
+
+vim.keymap.set('i', '<C-Space>', function()
+  vim.lsp.completion.get()
+end, { desc = 'Trigger LSP completion' })
+
+vim.cmd [[inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"]]
+
+vim.keymap.set({ 'i', 's' }, '<Tab>', function()
+  if vim.fn.pumvisible() == 1 then
+    return '<C-y>'
+  end
+
+  if vim.snippet.active { direction = 1 } then
+    return '<Cmd>lua vim.snippet.jump(1)<CR>'
+  end
+
+  return '<Tab>'
+end, { desc = 'Accept completion or jump snippet', expr = true, replace_keycodes = true })
+
+vim.keymap.set({ 'i', 's' }, '<C-l>', function()
+  if vim.snippet.active { direction = 1 } then
+    return '<Cmd>lua vim.snippet.jump(1)<CR>'
+  end
+
+  return '<C-l>'
+end, { desc = 'Jump to next snippet placeholder', expr = true, replace_keycodes = true })
+
+vim.keymap.set({ 'i', 's' }, '<C-h>', function()
+  if vim.snippet.active { direction = -1 } then
+    return '<Cmd>lua vim.snippet.jump(-1)<CR>'
+  end
+
+  return '<C-h>'
+end, { desc = 'Jump to previous snippet placeholder', expr = true, replace_keycodes = true })
+
 -- Window size management
 utils.map('<M-Up>', '<cmd>resize +2<cr>', 'Increase Window Height')
 utils.map('<M-Down>', '<cmd>resize -2<cr>', 'Decrease Window Height')

@@ -43,3 +43,75 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 8
 
 vim.opt.pumheight = 15
+vim.opt.pumborder = 'rounded'
+vim.opt.winborder = 'rounded'
+vim.opt.completeitemalign = 'abbr,kind,menu'
+vim.opt.completeopt = { 'menuone', 'noselect', 'popup', 'fuzzy' }
+
+local function set_completion_doc_border(winid)
+  if not winid or winid == 0 or not vim.api.nvim_win_is_valid(winid) then
+    return
+  end
+
+  local border = vim.o.pumborder ~= '' and vim.o.pumborder or vim.o.winborder
+  if border == '' then
+    return
+  end
+
+  pcall(vim.api.nvim_win_set_config, winid, { border = border })
+end
+
+if vim.api.nvim__complete_set and not vim.g.kickstart_completion_doc_border then
+  vim.g.kickstart_completion_doc_border = true
+  local complete_set = vim.api.nvim__complete_set
+
+  vim.api.nvim__complete_set = function(index, opts)
+    local windata = complete_set(index, opts)
+    if type(windata) == 'table' then
+      set_completion_doc_border(windata.winid)
+    end
+    return windata
+  end
+end
+
+local function set_completion_highlights()
+  vim.api.nvim_set_hl(0, 'PmenuBorder', { link = 'FloatBorder' })
+  vim.api.nvim_set_hl(0, 'PmenuKind', { link = 'NonText' })
+  vim.api.nvim_set_hl(0, 'PmenuKindSel', { link = 'PmenuSel' })
+  vim.api.nvim_set_hl(0, 'PmenuExtra', { link = 'Comment' })
+  vim.api.nvim_set_hl(0, 'PmenuExtraSel', { link = 'PmenuSel' })
+  vim.api.nvim_set_hl(0, 'PmenuMatch', { link = 'Search' })
+  vim.api.nvim_set_hl(0, 'PmenuMatchSel', { link = 'PmenuSel' })
+
+  vim.api.nvim_set_hl(0, 'CompletionItemKindFunction', { link = 'Function' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindMethod', { link = 'Function' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindVariable', { link = 'Identifier' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindField', { link = 'Identifier' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindProperty', { link = 'Identifier' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindClass', { link = 'Type' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindInterface', { link = 'Type' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindModule', { link = 'Include' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindFile', { link = 'Directory' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindFolder', { link = 'Directory' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindSnippet', { link = 'Special' })
+  vim.api.nvim_set_hl(0, 'CompletionItemKindKeyword', { link = 'Keyword' })
+end
+
+set_completion_highlights()
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = vim.api.nvim_create_augroup('completion-highlights', { clear = true }),
+  callback = set_completion_highlights,
+})
+
+vim.api.nvim_create_autocmd('CompleteChanged', {
+  group = vim.api.nvim_create_augroup('completion-doc-border', { clear = true }),
+  callback = function()
+    vim.schedule(function()
+      local ok, info = pcall(vim.fn.complete_info, { 'preview_winid' })
+      if ok then
+        set_completion_doc_border(info.preview_winid)
+      end
+    end)
+  end,
+})
