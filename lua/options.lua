@@ -48,6 +48,25 @@ vim.opt.winborder = 'rounded'
 vim.opt.completeitemalign = 'abbr,kind,menu'
 vim.opt.completeopt = { 'menuone', 'noselect', 'popup', 'fuzzy' }
 
+local checktime_timer
+local function check_external_changes()
+  if checktime_timer then
+    return
+  end
+
+  checktime_timer = vim.defer_fn(function()
+    checktime_timer = nil
+    if vim.fn.mode() ~= 'c' then
+      vim.cmd 'silent! checktime'
+    end
+  end, 200)
+end
+
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'TermClose', 'TermLeave' }, {
+  group = vim.api.nvim_create_augroup('external-file-changes', { clear = true }),
+  callback = check_external_changes,
+})
+
 local function set_completion_doc_border(winid)
   if not winid or winid == 0 or not vim.api.nvim_win_is_valid(winid) then
     return
