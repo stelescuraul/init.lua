@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ -z "${NVIM:-}" || $# -ne 1 ]]; then
+  exit 1
+fi
+
+encoded_path="$(printf '%s' "$1" | base64 -w 0)"
+nvim --server "$NVIM" --remote-expr "v:lua.LazyGitOpenFile('$encoded_path')" >/dev/null

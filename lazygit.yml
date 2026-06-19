@@ -1,0 +1,3 @@
+os:
+  editPreset: nvim-remote
+  open: '"$HOME/.config/nvim/bin/lazygit-open" "{{filename}}"'
