@@ -26,6 +26,7 @@ require('lazy').setup({
 
   require 'kickstart/plugins/gitsigns',
   require 'kickstart/plugins/telescope',
+  require 'kickstart/plugins/blink-cmp',
   require 'kickstart/plugins/lspconfig',
   require 'kickstart/plugins/conform',
   require 'kickstart/plugins/rose-pine',
