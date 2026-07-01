@@ -28,6 +28,7 @@ return {
         'javascript',
         'json',
         'query',
+        'yaml',
       }
 
       treesitter.install(parsers)
@@ -45,6 +46,7 @@ return {
         'typescript',
         'vim',
         'vimdoc',
+        'yaml',
       }
 
       vim.api.nvim_create_autocmd('FileType', {

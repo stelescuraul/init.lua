@@ -28,6 +28,7 @@ return {
         -- is found.
         javascript = { 'eslint', 'prettierd' },
         typescript = { 'eslint', 'prettierd' },
+        yaml = { 'prettierd' },
       },
     },
   },
