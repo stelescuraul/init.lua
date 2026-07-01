@@ -2,7 +2,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter-context',
     opts = {
-      multiline_treshold = 1,
+      multiline_threshold = 1,
       max_lines = 4,
     },
     cond = function()

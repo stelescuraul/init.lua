@@ -9,8 +9,6 @@ require('lazy').setup({
   -- include a plugin definition from file lua/path/name.lua
 
   -- require 'kickstart/plugins/tokyonight',
-  -- require 'kickstart.plugins.aerial',
-  -- require 'kickstart.plugins.typescript-tools',
   { 'stevearc/dressing.nvim', opts = {} },
   {
     'folke/lazydev.nvim',
@@ -26,6 +24,7 @@ require('lazy').setup({
 
   require 'kickstart/plugins/gitsigns',
   require 'kickstart/plugins/telescope',
+  require 'kickstart/plugins/blink-cmp',
   require 'kickstart/plugins/lspconfig',
   require 'kickstart/plugins/conform',
   require 'kickstart/plugins/rose-pine',
@@ -42,7 +41,6 @@ require('lazy').setup({
   require 'kickstart.plugins.gitlinker',
 
   require 'kickstart.plugins.github',
-  -- require 'kickstart.plugins.avante',
   require 'kickstart.plugins.sidekick',
   require 'kickstart.plugins.lazygit',
 

@@ -1,5 +1,4 @@
 local utils = require 'kickstart.utils'
-local icons = require 'icons'
 
 return {
   { -- LSP Configuration & Plugins
@@ -209,56 +208,10 @@ return {
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
             end, 'Toggle Inlay Hints')
           end
-
-          if client and client:supports_method 'textDocument/completion' then
-            local chars = {}
-            for i = 32, 126 do
-              chars[#chars + 1] = string.char(i)
-            end
-            client.server_capabilities.completionProvider.triggerCharacters = chars
-
-            vim.lsp.completion.enable(true, client.id, event.buf, {
-              autotrigger = true,
-              convert = function(item)
-                local kind_name = vim.lsp.protocol.CompletionItemKind[item.kind] or 'Text'
-                local kind_labels = {
-                  Function = 'fn',
-                  Method = 'meth',
-                  Variable = 'var',
-                  Field = 'field',
-                  Property = 'prop',
-                  Class = 'class',
-                  Interface = 'iface',
-                  Module = 'module',
-                  File = 'file',
-                  Folder = 'folder',
-                  Snippet = 'snip',
-                  Keyword = 'keyw',
-                }
-                local icon = vim.g.have_nerd_font and icons.kind[kind_name] or ''
-                local label = kind_labels[kind_name] or kind_name:lower()
-                local kind = icon ~= '' and string.format('%s %s', icon, label) or label
-
-                return {
-                  kind = kind,
-                  kind_hlgroup = 'CompletionItemKind' .. kind_name,
-                  menu = item.detail or client.name,
-                }
-              end,
-            })
-
-            vim.api.nvim_create_autocmd('InsertCharPre', {
-              group = vim.api.nvim_create_augroup('kickstart-lsp-completion', { clear = false }),
-              buffer = event.buf,
-              callback = function()
-                vim.lsp.completion.get()
-              end,
-            })
-          end
         end,
       })
 
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -301,105 +254,6 @@ return {
           },
         },
         tsgo = {},
-        -- vtsls = {
-        --   settings = {
-        --     vtsls = {
-        --       enableMoveToFileCodeAction = true,
-        --       autoUseWorkspaceTsdk = true,
-        --       experimental = {
-        --         completion = {
-        --           enableServerSideFuzzyMatch = true,
-        --         },
-        --       },
-        --     },
-        --
-        --     javascript = {
-        --       format = {
-        --         enable = false,
-        --         insertSpaceAfterOpeningAndBeforeClosingEmptyBraces = false,
-        --         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
-        --       },
-        --       updateImportsOnFileMove = { enabled = 'always' },
-        --       suggest = { completeFunctionCalls = true },
-        --       inlayHints = {
-        --         enumMemberValues = { enabled = true },
-        --         functionLikeReturnTypes = { enabled = true },
-        --         parameterNames = { enabled = 'literals' },
-        --         parameterTypes = { enabled = true },
-        --         propertyDeclarationTypes = { enabled = true },
-        --         variableTypes = { enabled = false },
-        --       },
-        --       implicitProjectConfig = {
-        --         checkJs = true, -- enable type checking for JavaScript files
-        --       },
-        --     },
-        --
-        --     typescript = {
-        --       format = {
-        --         enable = false,
-        --         insertSpaceAfterOpeningAndBeforeClosingEmptyBraces = false,
-        --         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
-        --       },
-        --       updateImportsOnFileMove = { enabled = 'always' },
-        --       suggest = { completeFunctionCalls = true },
-        --       tsserver = {
-        --         maxTsServerMemory = 1024 * 5,
-        --       },
-        --       implicitProjectConfig = {
-        --         checkJs = true, -- enable type checking for JavaScript files
-        --       },
-        --       inlayHints = {
-        --         enumMemberValues = { enabled = true },
-        --         functionLikeReturnTypes = { enabled = true },
-        --         parameterNames = { enabled = 'literals' },
-        --         parameterTypes = { enabled = true },
-        --         propertyDeclarationTypes = { enabled = true },
-        --         variableTypes = { enabled = false },
-        --       },
-        --     },
-        --   },
-        --   handlers = {
-        --     ['textDocument/publishDiagnostics'] = function(_, result, ctx, config)
-        --       if result.diagnostics == nil then
-        --         return
-        --       end
-        --
-        --       local diagnostic_bufnr = vim.uri_to_bufnr(result.uri)
-        --       local current_bufnr = vim.api.nvim_get_current_buf()
-        --
-        --       -- If the diagnostic is not for the buffer you are looking at, do nothing.
-        --       if diagnostic_bufnr ~= current_bufnr then
-        --         vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
-        --         return
-        --       end
-        --
-        --       local filetype = vim.api.nvim_buf_get_option(current_bufnr, 'filetype')
-        --
-        --       -- ignore some tsserver diagnostics
-        --       local idx = 1
-        --       while idx <= #result.diagnostics do
-        --         local entry = result.diagnostics[idx]
-        --
-        --         -- codes: https://github.com/microsoft/TypeScript/blob/main/src/compiler/diagnosticMessages.json
-        --
-        --         if
-        --           -- { message = "File is a CommonJS module; it may be converted to an ES module.", }
-        --           entry.code == 80001
-        --           -- { message = "Parameter 'x' implicitly has an 'any' type." }
-        --           -- { message = "Variable 'x' implicitly has an 'any' type." }
-        --           or ((entry.code == 7006 or entry.code == 7031) and filetype == 'javascript')
-        --         then
-        --           -- This error will only be removed for javascript files
-        --           table.remove(result.diagnostics, idx)
-        --         else
-        --           idx = idx + 1
-        --         end
-        --       end
-        --
-        --       vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
-        --     end,
-        --   },
-        -- },
       }
 
       -- Ensure the servers and tools above are installed

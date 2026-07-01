@@ -58,7 +58,7 @@ return {
         { '<leader>c', '<cmd>BufferKill<CR>', desc = 'Close Buffer' },
 
         { '<leader>P', group = 'Plugins' },
-        { '<leader>PS', '<cmd>Lazy clear<cr>', desc = 'Status' },
+        { '<leader>PS', '<cmd>Lazy<cr>', desc = 'Status' },
         { '<leader>Pc', '<cmd>Lazy clean<cr>', desc = 'Clean' },
         { '<leader>Pd', '<cmd>Lazy debug<cr>', desc = 'Debug' },
         { '<leader>Pi', '<cmd>Lazy install<cr>', desc = 'Install' },
